@@ -26,7 +26,7 @@ contract MerkleAirdropTest is Test {
         airdrop = new MerkleAirdrop(merkleRoot, token);
         token.mint(token.owner(), amountToSend);
         token.transfer(address(airdrop), amountToSend);
-        gasPayer = makeAddr("gasPayer");
+        //gasPayer = makeAddr("gasPayer");
         (user, userPrivKey) = makeAddrAndKey("user");
     }
 
@@ -35,19 +35,20 @@ contract MerkleAirdropTest is Test {
     //     (v, r, s) = vm.sign(privKey, hashedMessage);
     // }
 
-    // function testUsersCanClaim() public {
-    //     uint256 startingBalance = token.balanceOf(user);
+    function testUsersCanClaim() public {
+        uint256 startingBalance = token.balanceOf(user);
 
-    //     // get the signature
-    //     vm.startPrank(user);
-    //     (uint8 v, bytes32 r, bytes32 s) = signMessage(userPrivKey, user);
-    //     vm.stopPrank();
+        // get the signature
+        vm.startPrank(user);
+        // (uint8 v, bytes32 r, bytes32 s) = signMessage(userPrivKey, user);
+        // vm.stopPrank();
 
-    //     // gasPayer claims the airdrop for the user
-    //     vm.prank(gasPayer);
-    //     airdrop.claim(user, amountToCollect, proof, v, r, s);
-    //     uint256 endingBalance = token.balanceOf(user);
-    //     console.log("Ending balance: %d", endingBalance);
-    //     assertEq(endingBalance - startingBalance, amountToCollect);
-    // }
+        // // gasPayer claims the airdrop for the user
+        // vm.prank(gasPayer);
+        airdrop.claim(user, amountToCollect, proof);
+
+        uint256 endingBalance = token.balanceOf(user);
+        console.log("Ending balance: %d", endingBalance);
+        assertEq(endingBalance - startingBalance, amountToCollect);
+    }
 }
